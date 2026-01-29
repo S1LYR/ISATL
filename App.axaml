@@ -1,0 +1,34 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="IAFTS.App"
+             xmlns:local="using:IAFTS"
+             RequestedThemeVariant="Light">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Resources>
+        <FontFamily x:Key="InterFont">/Assets/Fonts/Inter-Thin.ttf#Inter</FontFamily>
+    </Application.Resources>
+    
+    <Application.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource InterFont}" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="FontFamily" Value="{DynamicResource InterFont}" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="FontFamily" Value="{DynamicResource InterFont}" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="FontFamily" Value="{DynamicResource InterFont}" />
+        </Style>
+        <Style Selector="Label">
+            <Setter Property="FontFamily" Value="{DynamicResource InterFont}" />
+        </Style>
+        <FluentTheme />
+    </Application.Styles>
+</Application>

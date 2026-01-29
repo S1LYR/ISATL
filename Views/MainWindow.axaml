@@ -1,0 +1,57 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:IAFTS.ViewModels"
+        xmlns:views="using:IAFTS.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="700"
+        x:Class="IAFTS.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="ИСАТЛ">
+
+    <Window.Styles>
+        <StyleInclude Source="/Styles/MainStyle.axaml"/>
+    </Window.Styles>
+
+    <DockPanel>
+
+        <!-- Верхняя панель с кнопками -->
+        <Grid DockPanel.Dock="Top" Height="56" Margin="0">
+            <!-- Фоновая фигура -->
+            <Path
+                Fill="#2DB874"
+                Stretch="Fill"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Height="56"
+                Data="M0,0 Q80,0 120,28 Q180,56 350,56 L2000,56 L2000,0 Z"/>
+            <!-- Центрированные по высоте кнопки -->
+            <Grid Height="56" VerticalAlignment="Stretch" Panel.ZIndex="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="-11,-13,0,0"
+                            Spacing="12">
+                    <Button Content="Работа" Padding="36,10"
+                            Background="#43e6a8" Foreground="Black" BorderBrush="Transparent" CornerRadius="24"
+                            Command="{Binding ShowWorkTabCommand}"/>
+                    <Button Content="О команде" Padding="36,10"
+                            Background="#43e6a8" Foreground="Black" BorderBrush="Transparent" CornerRadius="24"
+                            Command="{Binding ShowAboutUsTabCommand}"/>
+                    <Button Content="О проекте" Padding="36,10"
+                            Background="#43e6a8" Foreground="Black" BorderBrush="Transparent" CornerRadius="24"
+                            Command="{Binding ShowAboutProjectTabCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!-- Основной контент -->
+        <ContentControl Content="{Binding CurrentTabContent}"/>
+
+    </DockPanel>
+
+</Window>

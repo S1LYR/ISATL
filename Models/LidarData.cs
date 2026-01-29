@@ -26,4 +26,12 @@ namespace IAFTS.Models
         public double Height { get; set; }      // Высота дерева
         public string? Species { get; set; }     // Порода дерева
     }
+
+    public class MyData
+    {
+        public double x { get; set; }  // EPSG координаты
+        public double y { get; set; }
+        public double h { get; set; }      // Высота дерева
+        public string? s { get; set; }     // Порода дерева
+    }
 }

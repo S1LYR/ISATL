@@ -2,6 +2,8 @@ using System;
 using ReactiveUI;
 using Avalonia.Controls;
 using System.Reactive;
+using IAFTS.Models;
+using System.Collections.ObjectModel;
 
 namespace IAFTS.ViewModels
 {
@@ -30,7 +32,10 @@ namespace IAFTS.ViewModels
                 CurrentTabContent = new IAFTS.Views.AboutProjectTab();
                 return Unit.Default;
             });
+
             CurrentTabContent = CreateWorkContent();
+
+
         }
 
         public Window? Window

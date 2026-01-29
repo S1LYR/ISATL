@@ -11,6 +11,10 @@ using System.Linq;
 using IAFTS.Views;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using System.IO;
+using System.Collections.ObjectModel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IAFTS.ViewModels
 {
@@ -18,15 +22,35 @@ namespace IAFTS.ViewModels
     {
         private readonly SearchScriptService _searchScriptService;
         private readonly InferenceScriptService _inferenceScriptService;
-        private LidarData _lidarData;
-        private Window? _window;
-        //public Bitmap? ImageFromBinding { set;  get; } = new Bitmap("C:\\Users\\arsen\\Desktop\\pp1-afs2.jpg");
+        private readonly View3DSercive _view3DSercive;
 
+        private LidarData _lidarData;
+
+        private Window? _window;
+
+        private Bitmap? _image;
+
+        public Bitmap? Image
+        {
+            get => _image;
+            set => this.RaiseAndSetIfChanged(ref _image, value);
+        }
+
+        private ObservableCollection<MyData>? _data;
+
+        public ObservableCollection<MyData>? Data
+        {
+            get => _data;
+            set => this.RaiseAndSetIfChanged(ref _data, value);
+        }
+
+        
         public TreeDetectionViewModel()
         {
             Console.WriteLine("TreeDetectionViewModel создан");
             _searchScriptService = new SearchScriptService("search_script/search_script.py");
             _inferenceScriptService = new InferenceScriptService("inference/inference.py");
+            _view3DSercive = new View3DSercive("view_3d_script.py");
             _lidarData = new LidarData
             {
                 Trees = new List<Tree>()
@@ -36,6 +60,7 @@ namespace IAFTS.ViewModels
             LoadTiffCommand = ReactiveCommand.CreateFromTask(ExecuteLoadTiff);
             ProcessDataCommand = ReactiveCommand.CreateFromTask(ExecuteProcessData);
             SaveResultsCommand = ReactiveCommand.CreateFromTask(ExecuteSaveResults);
+            View3DCommand = ReactiveCommand.CreateFromTask(ExecuteView3D);
         }
 
         public Window? Window
@@ -57,6 +82,8 @@ namespace IAFTS.ViewModels
         public ReactiveCommand<Unit, Unit> LoadLasCommand { get; }
         public ReactiveCommand<Unit, Unit> LoadTiffCommand { get; }
         public ReactiveCommand<Unit, Unit> ProcessDataCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> View3DCommand { get; }
 
         private async Task ExecuteLoadLas()
         {
@@ -152,7 +179,16 @@ namespace IAFTS.ViewModels
 
                 await _inferenceScriptService.ProcessDataAsync(LidarData);
                 LidarData.ShpFilePath = LidarData.OutputPath + "/output.shp";
+
+                string name = Path.GetFileName(LidarData.TiffFilePath);
+                Image = new Bitmap($"model_output\\predict\\{name.Replace(".tif", ".jpg")}");
                 await _searchScriptService.ProcessDataAsync(LidarData);
+
+                var filePath = $"{LidarData.OutputPath}\\output.csv";
+                var dataList = CsvHelperExtensions.ReadCsv<MyData>(filePath);
+
+                Data = new ObservableCollection<MyData>(dataList);
+
                 var dialog = new InfoDialog("Данные успешно обработаны!");
                 dialog.Show(Window);
 
@@ -204,6 +240,11 @@ namespace IAFTS.ViewModels
             //var dialog = new InfoDialog("Файлы успешно сохранены!");
             //// Используем Show(Window) вместо ShowDialog(Window), чтобы не блокировать UI
             //dialog.Show(Window);
+        }
+
+        private async Task ExecuteView3D()
+        {
+            await _view3DSercive.ProcessDataAsync(LidarData);
         }
     }
 }

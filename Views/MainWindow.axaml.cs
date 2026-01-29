@@ -9,6 +9,9 @@ namespace IAFTS.Views
         public MainWindow()
         {
             InitializeComponent();
+            this.CanResize = false;  // Запретить изменение размера
+            this.Width = 1500;
+            this.Height = 600;
         }
     }
 }
